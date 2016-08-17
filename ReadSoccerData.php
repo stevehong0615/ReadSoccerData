@@ -1,5 +1,7 @@
 <?php
 header("content-type: text/html; charset=utf-8");
+header("Refresh: 60; url='https://lab-stevehong0615.c9users.io/ReadSoccerData/ReadSoccerData.php'");
+
 require_once 'Connect.php';
 
 $agent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)";
@@ -45,6 +47,7 @@ while (!feof($event)) {
         $result .= "$eventData";
     }
 }
+
 eval($result);
 
 $connect = new Connect;
