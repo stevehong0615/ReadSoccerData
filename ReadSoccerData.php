@@ -4,20 +4,17 @@ header("Refresh: 60; url='https://lab-stevehong0615.c9users.io/ReadSoccerData/Re
 
 require_once 'Connect.php';
 
-$agent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)";
 $url = "http://www.228365365.com/sports.php";
 $urlEvent = "http://www.228365365.com/app/member/FT_browse/body_var.php?uid=test00&rtype=r&langx=zh-cn&mtype=3&page_no=0&league_id=&hot_game=";
 
 $ch = curl_init();
 
-curl_setopt($ch, CURLOPT_USERAGENT, $agent);
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_COOKIEJAR, "cookieData.txt");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_HEADER, 0);
 $output = curl_exec($ch);
 
-curl_setopt($ch, CURLOPT_USERAGENT, $agent);
 curl_setopt($ch, CURLOPT_URL, $urlEvent);
 curl_setopt($ch, CURLOPT_COOKIEFILE, "cookieData.txt");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -41,7 +38,7 @@ while (!feof($event)) {
 
     if (preg_match("/parent.GameFT/", $eventData)) {
         $eventData = str_replace("parent.", "$", $eventData);
-        $eventData = str_replace("new A", "A", $eventData);
+        $eventData = str_replace("new Array", "Array", $eventData);
         $eventData = str_replace("<font color=red>Running Ball</font>", "", $eventData);
         $eventData = str_replace("<br>", "", $eventData);
         $result .= "$eventData";
@@ -62,7 +59,7 @@ foreach ($GameFT as $key => $value) {
     $league = $value[2];
     $eventOne = $value[5];
     $eventTwo = $value[6];
-    $eventThree = "和局";
+    $eventThree = "和";
     $winOvOne = $value[15];
     $winOvTwo = $value[16];
     $winOvThree = $value[17];
@@ -84,10 +81,10 @@ foreach ($GameFT as $key => $value) {
     $sizeHaSmall = str_replace("U", "小", $value[28]);
     $sizeHaTwo = $sizeHaSmall . " " . $value[29];
 
-    $insertData = "INSERT INTO `read_soccer_data` (`id`, `datetime`, `league`, `event_one`, `event_two`, `event_three`,
-        `win_ov_one`, `win_ov_two`, `win_ov_three`, `handicap_ov_one`, `handicap_ov_two`, `size_ov_one`,
-        `size_ov_two`, `mono_one`, `mono_two`, `win_ha_one`, `win_ha_two`, `win_ha_three`, `handicap_ha_one`,
-        `handicap_ha_two`, `size_ha_one`, `size_ha_two`)
+    $insertData = "INSERT INTO `read_soccer_data` (`id`, `datetime`, `league`, `event_one`,
+        `event_two`, `event_three`, `win_ov_one`, `win_ov_two`, `win_ov_three`, `handicap_ov_one`,
+        `handicap_ov_two`, `size_ov_one`, `size_ov_two`, `mono_one`, `mono_two`, `win_ha_one`,
+        `win_ha_two`, `win_ha_three`, `handicap_ha_one`, `handicap_ha_two`, `size_ha_one`, `size_ha_two`)
         VALUES (:id, :datetime, :league, :event_one, :event_two, :event_three, :win_ov_one,
         :win_ov_two, :win_ov_three, :handicap_ov_one, :handicap_ov_two, :size_ov_one,
         :size_ov_two, :mono_one, :mono_two, :win_ha_one, :win_ha_two, :win_ha_three,
